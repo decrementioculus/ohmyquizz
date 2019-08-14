@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/decrementioculus/ohmyquizz#readme",
   "dependencies": {
+    "@rehooks/window-size": "^1.0.2",
     "axios": "^0.19.0",
     "connected-react-router": "^6.5.2",
     "contentful-management": "^5.9.0",

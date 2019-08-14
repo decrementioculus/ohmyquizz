@@ -1,43 +1,41 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import api from "./utils/api";
+import { NavLink, Route, Switch } from "react-router-dom";
+import api from "./utils/api"
 
+import useWindowSize from "@rehooks/window-size"
 import Home from "./pages/home";
+import Players from "./pages/players";
+import Game from "./pages/game";
+import Layout from "./pages/layout";
+
+import { useTitle } from "./components/custom-hook"
+import { useAppIsFullscreen } from "./components/custom-window-size"
 
 export default props => {
+  const windowSize = useWindowSize()
+  console.log(windowSize);
+  
   const dispatch = useDispatch();
   const isLoaded = useSelector(state => state.app.isLoaded);
-  const [playerName, setPlayerName] = useState(null);
+  const isFullscreen = useSelector(state => state.app.fullscreen)
 
-  useEffect(() => {
-    dispatch({ type: "SET_LOADED" });
+  useTitle('My super title');
+  useAppIsFullscreen();
 
-    api.then(api => {
-      api
-        .getEntry("30DlkSFvmLSuAMN0rn9hwT")
-        .then(entry => {
-          entry.fields.name["en-US"] = "Super spongeBob";
-          return entry.update();
-        })
-        .then(entry => {
-          setPlayerName(entry.fields.name["en-US"]);
-          console.log(`Entry ${entry.sys.id} updated.`);
-        });
-    });
-  }, []);
-
-  const handleClick = () => {};
-
-  if (!isLoaded) return <h1>Loading...</h1>;
+  // if (!isLoaded) return <h1>Loading...</h1>;
 
   return (
     <div className="app-wrapper">
-      <h1>App wrapper</h1>
-      <Home />
-      {playerName ? `Player name is : ${playerName}` : `Player name is : ...`}
-      <button onClick={handleClick} className="block mt-4">
-        Change the player name [PUT]
-      </button>
+      {
+        isFullscreen ? <h1>App width : small </h1> : <h1>App width : large</h1>
+      }
+      {/* <Switch>
+        <Route path="/" exact component={Home} />
+        <Route path="/players" exact component={Players} />
+        <Route path="/game" exact component={Game} />
+        <Route path="/layout" exact component={Layout} />
+      </Switch> */}
     </div>
   );
 };

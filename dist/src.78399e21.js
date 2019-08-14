@@ -37318,8 +37318,67 @@ var isLoaded = function isLoaded() {
   }
 };
 
+var title = function title() {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+  var action = arguments.length > 1 ? arguments[1] : undefined;
+
+  switch (action.type) {
+    case "SET_TITLE":
+      return 'oh my quizz';
+
+    case "RESET_TITLE":
+      return "";
+
+    default:
+      return state;
+  }
+};
+
 var _default = (0, _redux.combineReducers)({
-  isLoaded: isLoaded
+  isLoaded: isLoaded,
+  title: title
+});
+
+exports.default = _default;
+},{"redux":"../node_modules/redux/es/redux.js"}],"js/reducers/players.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _redux = require("redux");
+
+var players = function players() {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+  var action = arguments.length > 1 ? arguments[1] : undefined;
+
+  switch (action.type) {
+    case "SET_PLAYERS":
+      return action.payload;
+
+    default:
+      return state;
+  }
+};
+
+var playersAreLoaded = function playersAreLoaded() {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+  var action = arguments.length > 1 ? arguments[1] : undefined;
+
+  switch (action.type) {
+    case 'SET_PLAYERS':
+      return true;
+
+    default:
+      return state;
+  }
+};
+
+var _default = (0, _redux.combineReducers)({
+  items: players,
+  areLoaded: playersAreLoaded
 });
 
 exports.default = _default;
@@ -37337,18 +37396,21 @@ var _connectedReactRouter = require("connected-react-router");
 
 var _app = _interopRequireDefault(require("./reducers/app"));
 
+var _players = _interopRequireDefault(require("./reducers/players"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var createRootReducer = function createRootReducer(history) {
   return (0, _redux.combineReducers)({
     router: (0, _connectedReactRouter.connectRouter)(history),
-    app: _app.default
+    app: _app.default,
+    players: _players.default
   });
 };
 
 var _default = createRootReducer;
 exports.default = _default;
-},{"redux":"../node_modules/redux/es/redux.js","connected-react-router":"../node_modules/connected-react-router/esm/index.js","./reducers/app":"js/reducers/app.js"}],"js/store.js":[function(require,module,exports) {
+},{"redux":"../node_modules/redux/es/redux.js","connected-react-router":"../node_modules/connected-react-router/esm/index.js","./reducers/app":"js/reducers/app.js","./reducers/players":"js/reducers/players.js"}],"js/store.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -37381,7 +37443,297 @@ var _default = function _default(preloadedState) {
 };
 
 exports.default = _default;
-},{"redux":"../node_modules/redux/es/redux.js","redux-thunk":"../node_modules/redux-thunk/es/index.js","redux-logger":"../node_modules/redux-logger/dist/redux-logger.js","redux-devtools-extension":"../node_modules/redux-devtools-extension/index.js","connected-react-router":"../node_modules/connected-react-router/esm/index.js","history":"../node_modules/history/esm/history.js","./reducers":"js/reducers.js"}],"../node_modules/axios/lib/helpers/bind.js":[function(require,module,exports) {
+},{"redux":"../node_modules/redux/es/redux.js","redux-thunk":"../node_modules/redux-thunk/es/index.js","redux-logger":"../node_modules/redux-logger/dist/redux-logger.js","redux-devtools-extension":"../node_modules/redux-devtools-extension/index.js","connected-react-router":"../node_modules/connected-react-router/esm/index.js","history":"../node_modules/history/esm/history.js","./reducers":"js/reducers.js"}],"../node_modules/react-router-dom/esm/react-router-dom.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var _exportNames = {
+  BrowserRouter: true,
+  HashRouter: true,
+  Link: true,
+  NavLink: true
+};
+exports.NavLink = NavLink;
+exports.Link = exports.HashRouter = exports.BrowserRouter = void 0;
+
+var _inheritsLoose2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/inheritsLoose"));
+
+var _react = _interopRequireDefault(require("react"));
+
+var _reactRouter = require("react-router");
+
+Object.keys(_reactRouter).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function () {
+      return _reactRouter[key];
+    }
+  });
+});
+
+var _history = require("history");
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
+var _tinyWarning = _interopRequireDefault(require("tiny-warning"));
+
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/extends"));
+
+var _objectWithoutPropertiesLoose2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/objectWithoutPropertiesLoose"));
+
+var _tinyInvariant = _interopRequireDefault(require("tiny-invariant"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * The public API for a <Router> that uses HTML5 history.
+ */
+var BrowserRouter =
+/*#__PURE__*/
+function (_React$Component) {
+  (0, _inheritsLoose2.default)(BrowserRouter, _React$Component);
+
+  function BrowserRouter() {
+    var _this;
+
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    _this = _React$Component.call.apply(_React$Component, [this].concat(args)) || this;
+    _this.history = (0, _history.createBrowserHistory)(_this.props);
+    return _this;
+  }
+
+  var _proto = BrowserRouter.prototype;
+
+  _proto.render = function render() {
+    return _react.default.createElement(_reactRouter.Router, {
+      history: this.history,
+      children: this.props.children
+    });
+  };
+
+  return BrowserRouter;
+}(_react.default.Component);
+
+exports.BrowserRouter = BrowserRouter;
+
+if ("development" !== "production") {
+  BrowserRouter.propTypes = {
+    basename: _propTypes.default.string,
+    children: _propTypes.default.node,
+    forceRefresh: _propTypes.default.bool,
+    getUserConfirmation: _propTypes.default.func,
+    keyLength: _propTypes.default.number
+  };
+
+  BrowserRouter.prototype.componentDidMount = function () {
+    "development" !== "production" ? (0, _tinyWarning.default)(!this.props.history, "<BrowserRouter> ignores the history prop. To use a custom history, " + "use `import { Router }` instead of `import { BrowserRouter as Router }`.") : void 0;
+  };
+}
+/**
+ * The public API for a <Router> that uses window.location.hash.
+ */
+
+
+var HashRouter =
+/*#__PURE__*/
+function (_React$Component) {
+  (0, _inheritsLoose2.default)(HashRouter, _React$Component);
+
+  function HashRouter() {
+    var _this;
+
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    _this = _React$Component.call.apply(_React$Component, [this].concat(args)) || this;
+    _this.history = (0, _history.createHashHistory)(_this.props);
+    return _this;
+  }
+
+  var _proto = HashRouter.prototype;
+
+  _proto.render = function render() {
+    return _react.default.createElement(_reactRouter.Router, {
+      history: this.history,
+      children: this.props.children
+    });
+  };
+
+  return HashRouter;
+}(_react.default.Component);
+
+exports.HashRouter = HashRouter;
+
+if ("development" !== "production") {
+  HashRouter.propTypes = {
+    basename: _propTypes.default.string,
+    children: _propTypes.default.node,
+    getUserConfirmation: _propTypes.default.func,
+    hashType: _propTypes.default.oneOf(["hashbang", "noslash", "slash"])
+  };
+
+  HashRouter.prototype.componentDidMount = function () {
+    "development" !== "production" ? (0, _tinyWarning.default)(!this.props.history, "<HashRouter> ignores the history prop. To use a custom history, " + "use `import { Router }` instead of `import { HashRouter as Router }`.") : void 0;
+  };
+}
+
+function isModifiedEvent(event) {
+  return !!(event.metaKey || event.altKey || event.ctrlKey || event.shiftKey);
+}
+/**
+ * The public API for rendering a history-aware <a>.
+ */
+
+
+var Link =
+/*#__PURE__*/
+function (_React$Component) {
+  (0, _inheritsLoose2.default)(Link, _React$Component);
+
+  function Link() {
+    return _React$Component.apply(this, arguments) || this;
+  }
+
+  var _proto = Link.prototype;
+
+  _proto.handleClick = function handleClick(event, history) {
+    try {
+      if (this.props.onClick) this.props.onClick(event);
+    } catch (ex) {
+      event.preventDefault();
+      throw ex;
+    }
+
+    if (!event.defaultPrevented && // onClick prevented default
+    event.button === 0 && ( // ignore everything but left clicks
+    !this.props.target || this.props.target === "_self") && // let browser handle "target=_blank" etc.
+    !isModifiedEvent(event) // ignore clicks with modifier keys
+    ) {
+        event.preventDefault();
+        var method = this.props.replace ? history.replace : history.push;
+        method(this.props.to);
+      }
+  };
+
+  _proto.render = function render() {
+    var _this = this;
+
+    var _this$props = this.props,
+        innerRef = _this$props.innerRef,
+        replace = _this$props.replace,
+        to = _this$props.to,
+        rest = (0, _objectWithoutPropertiesLoose2.default)(_this$props, ["innerRef", "replace", "to"]); // eslint-disable-line no-unused-vars
+
+    return _react.default.createElement(_reactRouter.__RouterContext.Consumer, null, function (context) {
+      !context ? "development" !== "production" ? (0, _tinyInvariant.default)(false, "You should not use <Link> outside a <Router>") : (0, _tinyInvariant.default)(false) : void 0;
+      var location = typeof to === "string" ? (0, _history.createLocation)(to, null, null, context.location) : to;
+      var href = location ? context.history.createHref(location) : "";
+      return _react.default.createElement("a", (0, _extends2.default)({}, rest, {
+        onClick: function onClick(event) {
+          return _this.handleClick(event, context.history);
+        },
+        href: href,
+        ref: innerRef
+      }));
+    });
+  };
+
+  return Link;
+}(_react.default.Component);
+
+exports.Link = Link;
+
+if ("development" !== "production") {
+  var toType = _propTypes.default.oneOfType([_propTypes.default.string, _propTypes.default.object]);
+
+  var innerRefType = _propTypes.default.oneOfType([_propTypes.default.string, _propTypes.default.func, _propTypes.default.shape({
+    current: _propTypes.default.any
+  })]);
+
+  Link.propTypes = {
+    innerRef: innerRefType,
+    onClick: _propTypes.default.func,
+    replace: _propTypes.default.bool,
+    target: _propTypes.default.string,
+    to: toType.isRequired
+  };
+}
+
+function joinClassnames() {
+  for (var _len = arguments.length, classnames = new Array(_len), _key = 0; _key < _len; _key++) {
+    classnames[_key] = arguments[_key];
+  }
+
+  return classnames.filter(function (i) {
+    return i;
+  }).join(" ");
+}
+/**
+ * A <Link> wrapper that knows if it's "active" or not.
+ */
+
+
+function NavLink(_ref) {
+  var _ref$ariaCurrent = _ref["aria-current"],
+      ariaCurrent = _ref$ariaCurrent === void 0 ? "page" : _ref$ariaCurrent,
+      _ref$activeClassName = _ref.activeClassName,
+      activeClassName = _ref$activeClassName === void 0 ? "active" : _ref$activeClassName,
+      activeStyle = _ref.activeStyle,
+      classNameProp = _ref.className,
+      exact = _ref.exact,
+      isActiveProp = _ref.isActive,
+      locationProp = _ref.location,
+      strict = _ref.strict,
+      styleProp = _ref.style,
+      to = _ref.to,
+      rest = (0, _objectWithoutPropertiesLoose2.default)(_ref, ["aria-current", "activeClassName", "activeStyle", "className", "exact", "isActive", "location", "strict", "style", "to"]);
+  var path = typeof to === "object" ? to.pathname : to; // Regex taken from: https://github.com/pillarjs/path-to-regexp/blob/master/index.js#L202
+
+  var escapedPath = path && path.replace(/([.+*?=^!:${}()[\]|/\\])/g, "\\$1");
+  return _react.default.createElement(_reactRouter.__RouterContext.Consumer, null, function (context) {
+    !context ? "development" !== "production" ? (0, _tinyInvariant.default)(false, "You should not use <NavLink> outside a <Router>") : (0, _tinyInvariant.default)(false) : void 0;
+    var pathToMatch = locationProp ? locationProp.pathname : context.location.pathname;
+    var match = escapedPath ? (0, _reactRouter.matchPath)(pathToMatch, {
+      path: escapedPath,
+      exact: exact,
+      strict: strict
+    }) : null;
+    var isActive = !!(isActiveProp ? isActiveProp(match, context.location) : match);
+    var className = isActive ? joinClassnames(classNameProp, activeClassName) : classNameProp;
+    var style = isActive ? (0, _extends2.default)({}, styleProp, activeStyle) : styleProp;
+    return _react.default.createElement(Link, (0, _extends2.default)({
+      "aria-current": isActive && ariaCurrent || null,
+      className: className,
+      style: style,
+      to: to
+    }, rest));
+  });
+}
+
+if ("development" !== "production") {
+  var ariaCurrentType = _propTypes.default.oneOf(["page", "step", "location", "date", "time", "true"]);
+
+  NavLink.propTypes = (0, _extends2.default)({}, Link.propTypes, {
+    "aria-current": ariaCurrentType,
+    activeClassName: _propTypes.default.string,
+    activeStyle: _propTypes.default.object,
+    className: _propTypes.default.string,
+    exact: _propTypes.default.bool,
+    isActive: _propTypes.default.func,
+    location: _propTypes.default.object,
+    strict: _propTypes.default.bool,
+    style: _propTypes.default.object
+  });
+}
+},{"@babel/runtime/helpers/esm/inheritsLoose":"../node_modules/@babel/runtime/helpers/esm/inheritsLoose.js","react":"../node_modules/react/index.js","react-router":"../node_modules/react-router/esm/react-router.js","history":"../node_modules/history/esm/history.js","prop-types":"../node_modules/prop-types/index.js","tiny-warning":"../node_modules/tiny-warning/dist/tiny-warning.esm.js","@babel/runtime/helpers/esm/extends":"../node_modules/@babel/runtime/helpers/esm/extends.js","@babel/runtime/helpers/esm/objectWithoutPropertiesLoose":"../node_modules/@babel/runtime/helpers/esm/objectWithoutPropertiesLoose.js","tiny-invariant":"../node_modules/tiny-invariant/dist/tiny-invariant.esm.js"}],"../node_modules/axios/lib/helpers/bind.js":[function(require,module,exports) {
 'use strict';
 
 module.exports = function bind(fn, thisArg) {
@@ -49962,11 +50314,47 @@ var _react = _interopRequireDefault(require("react"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var _default = function _default(props) {
-  return _react.default.createElement("h1", null, "HomePage");
+  return _react.default.createElement("div", null, _react.default.createElement("h1", null, "Quizz"), _react.default.createElement("button", null, "Play"));
 };
 
 exports.default = _default;
-},{"react":"../node_modules/react/index.js"}],"js/app.jsx":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js"}],"js/utils/contentful.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getEntries = getEntries;
+exports.getQuestions = getQuestions;
+
+var _api = _interopRequireDefault(require("./api"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function getEntries(contentType) {
+  return new Promise(function (resolve) {
+    _api.default.then(function (env) {
+      env.getEntries({
+        content_type: contentType
+      }).then(function (entries) {
+        resolve(entries);
+      });
+    });
+  });
+}
+
+function getQuestions(contentType) {
+  return new Promise(function (resolve) {
+    _api.default.then(function (env) {
+      env.getQuestions({
+        content_type: contentType
+      }).then(function (entries) {
+        resolve(entries);
+      });
+    });
+  });
+}
+},{"./api":"js/utils/api.js"}],"js/pages/Players/index.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -49978,9 +50366,121 @@ var _react = _interopRequireWildcard(require("react"));
 
 var _reactRedux = require("react-redux");
 
+var _contentful = require("../../utils/contentful");
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+
+var _default = function _default(props) {
+  var dispatch = (0, _reactRedux.useDispatch)();
+  var players = (0, _reactRedux.useSelector)(function (state) {
+    return state.players;
+  });
+  (0, _react.useEffect)(function () {
+    (0, _contentful.getEntries)('player').then(function (entries) {
+      dispatch({
+        type: 'SET_PLAYERS',
+        payload: entries.items
+      });
+    });
+  }, []);
+  if (!players.areLoaded) return _react.default.createElement("h1", null, "Players are loading");
+  return _react.default.createElement("section", null, _react.default.createElement("h1", null, "Players :"), _react.default.createElement("ul", null, players.items.map(function (player) {
+    return _react.default.createElement("li", {
+      key: player.sys.id
+    }, player.fields.name['en-US']);
+  })));
+};
+
+exports.default = _default;
+},{"react":"../node_modules/react/index.js","react-redux":"../node_modules/react-redux/es/index.js","../../utils/contentful":"js/utils/contentful.js"}],"js/pages/Game/index.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireWildcard(require("react"));
+
+var _contentful = require("./../../utils/contentful");
+
+var _reactRedux = require("react-redux");
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
+
+function _iterableToArrayLimit(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+var _default = function _default(props) {
+  var _useState = (0, _react.useState)(null),
+      _useState2 = _slicedToArray(_useState, 2),
+      currentPlayer = _useState2[0],
+      setCurrentPlayer = _useState2[1];
+
+  var players = (0, _reactRedux.useSelector)(function (state) {
+    return state.players;
+  });
+
+  var _useState3 = (0, _react.useState)([]),
+      _useState4 = _slicedToArray(_useState3, 2),
+      questions = _useState4[0],
+      setQuestions = _useState4[1];
+
+  var dispatch = (0, _reactRedux.useDispatch)();
+  (0, _react.useEffect)(function () {
+    (0, _contentful.getEntries)('player').then(function (entries) {
+      console.log(entries);
+      dispatch({
+        type: 'SET_PLAYERS',
+        payload: entries.items
+      });
+    });
+    (0, _contentful.getQuestions)('questions').then(function (entries) {
+      console.log(entries);
+    });
+  }, []);
+
+  var handleClick = function handleClick(player) {
+    setCurrentPlayer(player);
+  };
+
+  return _react.default.createElement("section", null, _react.default.createElement("h1", null, "Jeu"), _react.default.createElement("h2", null, "Liste des joueurs :"), _react.default.createElement("ul", null, players.items.map(function (player) {
+    return _react.default.createElement("li", {
+      onClick: function onClick() {
+        return handleClick(player.fields.name['en-US']);
+      },
+      key: player.sys.id
+    }, player.fields.name['en-US']);
+  })), _react.default.createElement("h2", null, "Current player :"), _react.default.createElement("p", null, currentPlayer), _react.default.createElement("h2", null, "Liste des Questions :"));
+};
+
+exports.default = _default;
+},{"react":"../node_modules/react/index.js","./../../utils/contentful":"js/utils/contentful.js","react-redux":"../node_modules/react-redux/es/index.js"}],"js/app.jsx":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireWildcard(require("react"));
+
+var _reactRedux = require("react-redux");
+
+var _reactRouterDom = require("react-router-dom");
+
 var _api = _interopRequireDefault(require("./utils/api"));
 
 var _home = _interopRequireDefault(require("./pages/home"));
+
+var _Players = _interopRequireDefault(require("./pages/Players"));
+
+var _Game = _interopRequireDefault(require("./pages/Game"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -50009,15 +50509,12 @@ var _default = function _default(props) {
     dispatch({
       type: "SET_LOADED"
     });
-
-    _api.default.then(function (api) {
-      api.getEntry("30DlkSFvmLSuAMN0rn9hwT").then(function (entry) {
-        entry.fields.name["en-US"] = "Super spongeBob";
-        return entry.update();
-      }).then(function (entry) {
-        setPlayerName(entry.fields.name["en-US"]);
-        console.log("Entry ".concat(entry.sys.id, " updated."));
-      });
+    dispatch({
+      type: "SET_TITLE",
+      payload: "my super title"
+    });
+    dispatch({
+      type: "RESET_TITLE"
     });
   }, []);
 
@@ -50026,14 +50523,21 @@ var _default = function _default(props) {
   if (!isLoaded) return _react.default.createElement("h1", null, "Loading...");
   return _react.default.createElement("div", {
     className: "app-wrapper"
-  }, _react.default.createElement("h1", null, "App wrapper"), _react.default.createElement(_home.default, null), playerName ? "Player name is : ".concat(playerName) : "Player name is : ...", _react.default.createElement("button", {
-    onClick: handleClick,
-    className: "block mt-4"
-  }, "Change the player name [PUT]"));
+  }, _react.default.createElement(_reactRouterDom.Switch, null, _react.default.createElement(_reactRouterDom.Route, {
+    exact: true,
+    path: "/",
+    component: _home.default
+  }), _react.default.createElement(_reactRouterDom.Route, {
+    path: "/players",
+    component: _Players.default
+  }), _react.default.createElement(_reactRouterDom.Route, {
+    path: "/game",
+    component: _Game.default
+  })));
 };
 
 exports.default = _default;
-},{"react":"../node_modules/react/index.js","react-redux":"../node_modules/react-redux/es/index.js","./utils/api":"js/utils/api.js","./pages/home":"js/pages/home.jsx"}],"index.jsx":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","react-redux":"../node_modules/react-redux/es/index.js","react-router-dom":"../node_modules/react-router-dom/esm/react-router-dom.js","./utils/api":"js/utils/api.js","./pages/home":"js/pages/home.jsx","./pages/Players":"js/pages/Players/index.js","./pages/Game":"js/pages/Game/index.js"}],"index.jsx":[function(require,module,exports) {
 "use strict";
 
 var _react = _interopRequireDefault(require("react"));
@@ -50088,7 +50592,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "45023" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "37377" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
